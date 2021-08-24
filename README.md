@@ -13,9 +13,7 @@ sudo pacman -S raylib
 ``` 
 
 ### Windows e outras distribuicoes:
-https://github.com/raysan5/raylib/wiki/Working-on-Windows
-
-https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux
+https://github.com/raysan5/raylib/wiki/Working-on-Windows | https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux
 
 ### Compilar:
 Apos instalar os requisitos mencionados e baixar o repositorio, entre na pasta build e execute o comando make, depois disso basta executar GoL.bin para utilizar.
