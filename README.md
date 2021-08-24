@@ -14,6 +14,7 @@ sudo pacman -S raylib
 
 ### Windows e outras distribuicoes:
 https://github.com/raysan5/raylib/wiki/Working-on-Windows
+
 https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux
 
 ### Compilar:
