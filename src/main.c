@@ -30,13 +30,8 @@ int main(int argc, char const *argv[]){
     clear_button.width = 200;
     clear_button.height = win_height;
 
-    printf("\n%d\n", start_button.height);
-
     while (!WindowShouldClose()){
-        for (int x=0; x<cols; x++) 
-        for (int y=0; y<rows; y++)
-        if (CheckCollisionPointRec(GetMousePosition(), board[x][y].rect) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && !game_state)
-        board[x][y].state = !board[x][y].state;
+        click_state(board, rows, cols, game_state);
 
         if (CheckCollisionPointRec(GetMousePosition(), start_button) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
         game_state = !game_state;
@@ -49,16 +44,8 @@ int main(int argc, char const *argv[]){
 
         BeginDrawing();
         ClearBackground(GRAY);
-        
-        for (int x=0; x<cols; x++){
-            for (int y=0; y<rows; y++){
-                if (board[x][y].state == alive) temp_color = WHITE;
-                else if (board[x][y].state == dead) temp_color = BLACK;
-                DrawRectanglePro(board[x][y].rect, (Vector2){board[x][y].rect.width/2, board[x][y].rect.height/2}, 0.0, temp_color);
-                DrawLine(0, y*cell_size, win_width, y*cell_size, GRAY);
-            }
-            DrawLine(x*cell_size, 0, x*cell_size, rows*cell_size, GRAY);
-        }
+
+        show_board(board, rows, cols, win_width, cell_size);
 
         if (!game_state) {
             DrawRectanglePro(start_button, (Vector2){0, 0}, 0.0, LIME);

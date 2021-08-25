@@ -1,5 +1,10 @@
 #include "../include/game.h"
 
+struct cell{
+    Rectangle rect;
+    int state;
+};
+
 cell** create_board(int rows, int cols, int width, int height, int cell_size){
     cell** board = NULL;
     board = (cell**) malloc(sizeof(cell*)*cols);
@@ -71,6 +76,35 @@ int game_step(cell** board, int rows, int cols, int width, int height, int cell_
     board[x][y].state = temp_board[x][y];
     
     clear_temp_board_memory(temp_board, cols);
+    return 1;
+}
+
+int show_board(cell** board, int rows, int cols, int width, int cell_size){
+    if (board == NULL) return 0;
+
+    Color temp_color;
+
+    for (int x=0; x<cols; x++){
+        for (int y=0; y<rows; y++){
+            if (board[x][y].state == alive) temp_color = WHITE;
+            else if (board[x][y].state == dead) temp_color = BLACK;
+            DrawRectanglePro(board[x][y].rect, (Vector2){board[x][y].rect.width/2, board[x][y].rect.height/2}, 0.0, temp_color);
+            DrawLine(0, y*cell_size, width, y*cell_size, GRAY);
+        }
+        DrawLine(x*cell_size, 0, x*cell_size, rows*cell_size, GRAY);
+    }
+
+    return 1;
+}
+
+int click_state(cell** board, int rows, int cols, bool game_state){
+    if (board == NULL) return 0;
+
+    for (int x=0; x<cols; x++) 
+    for (int y=0; y<rows; y++)
+    if (CheckCollisionPointRec(GetMousePosition(), board[x][y].rect) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && !game_state)
+    board[x][y].state = !board[x][y].state;
+
     return 1;
 }
 
