@@ -7,7 +7,7 @@ int main(int argc, char const *argv[]){
     const int cols = (int) win_width/cell_size;
     const int rows = (int) ((win_height-(3*cell_size))/cell_size);
     const int fps = 60;
-    const int generations_per_sec = 3;
+    const int generations_per_sec = 6;
     const int frames_per_generation = fps/generations_per_sec;
 
     cell** board = create_board(rows, cols, win_width, win_height, cell_size);
@@ -48,15 +48,15 @@ int main(int argc, char const *argv[]){
         show_board(board, rows, cols, win_width, cell_size);
 
         if (!game_state) {
-            DrawRectanglePro(start_button, (Vector2){0, 0}, 0.0, LIME);
+            DrawRectangleRec(start_button, LIME);
             DrawText("Iniciar", start_button.x+10, start_button.y+5, win_height-(cell_size*rows), WHITE);
             }
         else{
-            DrawRectanglePro(start_button, (Vector2){0, 0}, 0.0, RED);
+            DrawRectangleRec(start_button, RED);
             DrawText("Parar", start_button.x+10, start_button.y+5, win_height-(cell_size*rows), WHITE);
             }
 
-        DrawRectanglePro(clear_button, (Vector2){0, 0}, 0.0, BROWN);
+        DrawRectangleRec(clear_button, BROWN);
         DrawText("Limpar", clear_button.x+20, clear_button.y+5, win_height-(cell_size*rows), WHITE);
 
         EndDrawing();
