@@ -11,6 +11,7 @@ int main(int argc, char const *argv[]){
     const int frames_per_generation = fps/generations_per_sec;
 
     cell** board = create_board(rows, cols, win_width, win_height, cell_size);
+    int** aux_board = create_aux_board(rows, cols, win_width, win_height, cell_size);
     Color temp_color;
     bool game_state = false;
     int current_frame = 0;
@@ -44,7 +45,7 @@ int main(int argc, char const *argv[]){
         }
 
         if (current_frame%frames_per_generation == 0 && game_state){
-            game_step(board, rows, cols, win_width, win_height, cell_size);
+            game_step(board, aux_board, rows, cols, win_width, win_height, cell_size);
             ++generation;
         }
 
@@ -73,6 +74,7 @@ int main(int argc, char const *argv[]){
         ++current_frame;
     }
 
+    clear_aux_board_memory(aux_board, rows);
     clear_board_memory(board, cols);
     CloseWindow();
 }
