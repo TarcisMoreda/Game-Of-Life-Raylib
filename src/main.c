@@ -26,10 +26,10 @@ int main(int argc, char const *argv[]){
     while (!WindowShouldClose()){
         for (int x=0; x<rows; x++) 
         for (int y=0; y<cols; y++)
-        if (CheckCollisionPointRec(GetMousePosition(), board[x][y].rect) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !game_state)
+        if (CheckCollisionPointRec(GetMousePosition(), board[x][y].rect) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && !game_state)
         board[x][y].state = !board[x][y].state;
 
-        if (CheckCollisionPointRec(GetMousePosition(), start_button) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        if (CheckCollisionPointRec(GetMousePosition(), start_button) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
         game_state = !game_state;
 
         if (current_frame%frames_per_generation == 0 && game_state)
