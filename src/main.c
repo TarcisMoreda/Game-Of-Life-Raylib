@@ -1,5 +1,4 @@
-#include "include/game.h"
-#include <stdio.h>
+#include "../include/game.h"
 
 int main(int argc, char const *argv[]){
     const int win_width = 800;
@@ -33,9 +32,8 @@ int main(int argc, char const *argv[]){
         if (CheckCollisionPointRec(GetMousePosition(), start_button) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         game_state = !game_state;
 
-        if (current_frame%frames_per_generation == 0 && game_state){
-            game_step(board, rows, cols, win_width, win_height, cell_size);
-        }
+        if (current_frame%frames_per_generation == 0 && game_state)
+        game_step(board, rows, cols, win_width, win_height, cell_size);
 
         BeginDrawing();
         ClearBackground(RAYWHITE);

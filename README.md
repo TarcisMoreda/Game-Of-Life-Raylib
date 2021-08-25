@@ -17,6 +17,12 @@ https://github.com/raysan5/raylib/wiki/Working-on-Windows | https://github.com/r
 
 ### Compilar:
 Apos instalar os requisitos mencionados e baixar o repositorio, entre na pasta build e execute o comando make, depois disso basta executar GoL.bin para utilizar.
+```
+git clone https://github.com/TarcisMoreda/Game-Of-Life-Raylib.git
+cd Game\ Of\ Life\ Window/build
+make
+./GoL.bin
+```
 
 ### Aviso:
 Os paramentros de compilacao do arquivo make estao otimizados para ArchLinux com X11, se algo de errado acontecer durante o processo de compilacao retirar os seguintes parametros:
