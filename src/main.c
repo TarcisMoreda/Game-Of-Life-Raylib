@@ -14,6 +14,8 @@ int main(int argc, char const *argv[]){
     Color temp_color;
     bool game_state = false;
     int current_frame = 0;
+    char str_buffer[50];
+    int generation = 0;
 
     InitWindow(win_width, win_height, "Conway's Game of Life");
     SetTargetFPS(fps);
@@ -36,11 +38,17 @@ int main(int argc, char const *argv[]){
         if (CheckCollisionPointRec(GetMousePosition(), start_button) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
         game_state = !game_state;
 
-        if (CheckCollisionPointRec(GetMousePosition(), clear_button) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && !game_state)
-        reset_board(board, rows, cols);
+        if (CheckCollisionPointRec(GetMousePosition(), clear_button) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && !game_state){
+            reset_board(board, rows, cols);
+            generation = 0;
+        }
 
-        if (current_frame%frames_per_generation == 0 && game_state)
-        game_step(board, rows, cols, win_width, win_height, cell_size);
+        if (current_frame%frames_per_generation == 0 && game_state){
+            game_step(board, rows, cols, win_width, win_height, cell_size);
+            ++generation;
+        }
+
+        snprintf(str_buffer, 50, "Geracao: %d", generation);
 
         BeginDrawing();
         ClearBackground(GRAY);
@@ -58,6 +66,8 @@ int main(int argc, char const *argv[]){
 
         DrawRectangleRec(clear_button, BROWN);
         DrawText("Limpar", clear_button.x+20, clear_button.y+5, win_height-(cell_size*rows), WHITE);
+
+        DrawText(str_buffer, start_button.width+10, start_button.y+5, win_height-(cell_size*rows), WHITE);
 
         EndDrawing();
         ++current_frame;
