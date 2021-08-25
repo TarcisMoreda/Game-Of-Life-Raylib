@@ -4,10 +4,11 @@ int main(int argc, char const *argv[]){
     const int win_width = 800;
     const int win_height = 600;
     const int cell_size = 16;
-    const int rows = (int) win_width/cell_size;
-    const int cols = (int) ((win_height-(3*16))/cell_size);
+    const int cols = (int) win_width/cell_size;
+    const int rows = (int) ((win_height-(3*cell_size))/cell_size);
     const int fps = 60;
-    const int frames_per_generation = fps/2;
+    const int generations_per_sec = 3;
+    const int frames_per_generation = fps/generations_per_sec;
 
     cell** board = create_board(rows, cols, win_width, win_height, cell_size);
     Color temp_color;
@@ -19,45 +20,62 @@ int main(int argc, char const *argv[]){
 
     Rectangle start_button;
     start_button.x = 0;
-    start_button.y = cols*cell_size;
+    start_button.y = rows*cell_size;
     start_button.width = 200;
-    start_button.height = win_height-(cols*cell_size);
+    start_button.height = win_height;
+
+    Rectangle clear_button;
+    clear_button.x = win_width-200;
+    clear_button.y = rows*cell_size;
+    clear_button.width = 200;
+    clear_button.height = win_height;
+
+    printf("\n%d\n", start_button.height);
 
     while (!WindowShouldClose()){
-        for (int x=0; x<rows; x++) 
-        for (int y=0; y<cols; y++)
+        for (int x=0; x<cols; x++) 
+        for (int y=0; y<rows; y++)
         if (CheckCollisionPointRec(GetMousePosition(), board[x][y].rect) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && !game_state)
         board[x][y].state = !board[x][y].state;
 
         if (CheckCollisionPointRec(GetMousePosition(), start_button) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
         game_state = !game_state;
 
+        if (CheckCollisionPointRec(GetMousePosition(), clear_button) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && !game_state)
+        reset_board(board, rows, cols);
+
         if (current_frame%frames_per_generation == 0 && game_state)
         game_step(board, rows, cols, win_width, win_height, cell_size);
 
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+        ClearBackground(GRAY);
         
-        for (int x=0; x<rows; x++) 
-        for (int y=0; y<cols; y++){
-            if (board[x][y].state == alive) temp_color = WHITE;
-            else if (board[x][y].state == dead) temp_color = BLACK;
-            DrawRectanglePro(board[x][y].rect, (Vector2){board[x][y].rect.width/2, board[x][y].rect.height/2}, 0.0, temp_color);
+        for (int x=0; x<cols; x++){
+            for (int y=0; y<rows; y++){
+                if (board[x][y].state == alive) temp_color = WHITE;
+                else if (board[x][y].state == dead) temp_color = BLACK;
+                DrawRectanglePro(board[x][y].rect, (Vector2){board[x][y].rect.width/2, board[x][y].rect.height/2}, 0.0, temp_color);
+                DrawLine(0, y*cell_size, win_width, y*cell_size, GRAY);
+            }
+            DrawLine(x*cell_size, 0, x*cell_size, rows*cell_size, GRAY);
         }
 
         if (!game_state) {
             DrawRectanglePro(start_button, (Vector2){0, 0}, 0.0, LIME);
-            DrawText("Iniciar", start_button.x+10, start_button.y+5, start_button.height, WHITE);
+            DrawText("Iniciar", start_button.x+10, start_button.y+5, win_height-(cell_size*rows), WHITE);
             }
         else{
             DrawRectanglePro(start_button, (Vector2){0, 0}, 0.0, RED);
-            DrawText("Parar", start_button.x+10, start_button.y+5, start_button.height, WHITE);
+            DrawText("Parar", start_button.x+10, start_button.y+5, win_height-(cell_size*rows), WHITE);
             }
+
+        DrawRectanglePro(clear_button, (Vector2){0, 0}, 0.0, BROWN);
+        DrawText("Limpar", clear_button.x+20, clear_button.y+5, win_height-(cell_size*rows), WHITE);
 
         EndDrawing();
         ++current_frame;
     }
 
-    clear_board_memory(board, rows);
+    clear_board_memory(board, cols);
     CloseWindow();
 }
