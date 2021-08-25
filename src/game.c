@@ -1,4 +1,5 @@
 #include "../include/game.h"
+#include <stdlib.h>
 
 struct cell{
     Rectangle rect;

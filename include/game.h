@@ -1,6 +1,5 @@
 #include <raylib.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 enum{alive = 1, dead = 0};
 typedef struct cell cell;
