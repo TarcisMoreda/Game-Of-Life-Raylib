@@ -1,7 +1,6 @@
 #include <raylib.h>
 #include <stdio.h>
 
-enum{alive = 1, dead = 0};
 typedef struct cell cell;
 
 cell** create_board(int rows, int cols, int width, int height, int cell_size);

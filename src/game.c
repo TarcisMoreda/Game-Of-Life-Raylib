@@ -1,6 +1,7 @@
 #include "../include/game.h"
 #include <stdlib.h>
 
+enum{alive = 1, dead = 0};
 struct cell{
     Rectangle rect;
     int state;
