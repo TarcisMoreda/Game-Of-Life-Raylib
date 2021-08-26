@@ -12,7 +12,6 @@ int main(int argc, char const *argv[]){
 
     cell** board = create_board(rows, cols, win_width, win_height, cell_size);
     int** aux_board = create_aux_board(rows, cols, win_width, win_height, cell_size);
-    Color temp_color;
     bool game_state = false;
     int current_frame = 0;
     char str_buffer[50];
