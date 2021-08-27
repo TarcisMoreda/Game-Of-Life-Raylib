@@ -1,12 +1,12 @@
 #include "../include/game.h"
 
 int main(int argc, char const *argv[]){
-    //Definindo constantes que podem ser alteradas para um experiencia diferente
+    //Definindo constantes que podem ser alteradas para uma experiencia diferente
     const int win_width = 800;
     const int win_height = 600;
-    const int cell_size = 16;
+    const int cell_size = 8;
     const int cols = (int) win_width/cell_size;
-    const int rows = (int) ((win_height-(3*cell_size))/cell_size);
+    const int rows = (int) ((win_height-50)/cell_size);
     const int fps = 60;
     const int generations_per_sec = 6;
     const int frames_per_generation = fps/generations_per_sec;
@@ -66,17 +66,17 @@ int main(int argc, char const *argv[]){
         //Logica para a mudanca de cor e texto do botao start_button
         if (!game_state) {
             DrawRectangleRec(start_button, LIME);
-            DrawText("Iniciar", start_button.x+10, start_button.y+5, win_height-(cell_size*rows), WHITE);
+            DrawText("Iniciar", start_button.x+10, start_button.y+5, win_height-start_button.y, WHITE);
             }
         else{
             DrawRectangleRec(start_button, RED);
-            DrawText("Parar", start_button.x+10, start_button.y+5, win_height-(cell_size*rows), WHITE);
+            DrawText("Parar", start_button.x+10, start_button.y+5, win_height-start_button.y, WHITE);
             }
 
         DrawRectangleRec(clear_button, BROWN);
-        DrawText("Limpar", clear_button.x+20, clear_button.y+5, win_height-(cell_size*rows), WHITE);
+        DrawText("Limpar", clear_button.x+20, clear_button.y+5, win_height-clear_button.y, WHITE);
 
-        DrawText(str_buffer, start_button.width+10, start_button.y+5, win_height-(cell_size*rows), WHITE);
+        DrawText(str_buffer, start_button.width+10, start_button.y+5, win_height-clear_button.y, WHITE);
 
         EndDrawing();
         if (game_state) ++current_frame;
