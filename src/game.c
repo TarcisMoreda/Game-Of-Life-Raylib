@@ -1,21 +1,23 @@
 #include "../include/game.h"
 #include <stdlib.h>
 
+//definindo o que e uma celula
 enum{alive = 1, dead = 0};
 struct cell{
     Rectangle rect;
     int state;
 };
 
+//Funcao aloca memoria para o tabuleiro e preenche os dados de acordo
 cell** create_board(int rows, int cols, int width, int height, int cell_size){
     cell** board = NULL;
     board = (cell**) malloc(sizeof(cell*)*cols);
-    for (int i=0; i<cols; i++) board[i] = (cell*) malloc(sizeof(cell)*rows);
+    for (int x=0; x<cols; x++) board[x] = (cell*) malloc(sizeof(cell)*rows);
 
     for (int x=0; x<cols; x++){
         for (int y=0; y<rows; y++){
-            board[x][y].rect.x = cell_size/2 + cell_size*x;
-            board[x][y].rect.y = cell_size/2 + cell_size*y;
+            board[x][y].rect.x = cell_size*x;
+            board[x][y].rect.y = cell_size*y;
             board[x][y].rect.width = cell_size;
             board[x][y].rect.height = cell_size;
             board[x][y].state = dead;
@@ -25,10 +27,11 @@ cell** create_board(int rows, int cols, int width, int height, int cell_size){
     return board;
 }
 
+//Funcao aloca memoria para o tabuleiro auxiliar e preenche os dados
 int** create_aux_board(int rows, int cols, int width, int height, int cell_size){
     int** board = NULL;
     board = (int**) malloc(sizeof(int*)*cols);
-    for (int i=0; i<cols; i++) board[i] = (int*) malloc(sizeof(int)*rows);
+    for (int x=0; x<cols; x++) board[x] = (int*) malloc(sizeof(int)*rows);
 
     for (int x=0; x<cols; x++)
     for (int y=0; y<rows; y++)
@@ -37,6 +40,7 @@ int** create_aux_board(int rows, int cols, int width, int height, int cell_size)
     return board;
 }
 
+//Procura por todos os vizinhos da celula atual
 int check_neighbours(cell** board, int rows, int cols, int x, int y){
     int neighbours = 0;
     
@@ -52,6 +56,7 @@ int check_neighbours(cell** board, int rows, int cols, int x, int y){
     return neighbours;
 }
 
+//Faz a proxima geracao do jogo
 int game_step(cell** board, int** aux_board, int rows, int cols, int width, int height, int cell_size){
     if (board == NULL) return 0;
 
@@ -63,13 +68,12 @@ int game_step(cell** board, int** aux_board, int rows, int cols, int width, int 
     aux_board[x][y] = board[x][y].state;
     
     
-    for (int x=0; x<cols; x++){
-        for (int y=0; y<rows; y++){
-            neighbours = check_neighbours(board, rows, cols, x, y);
-
-            if (board[x][y].state == alive && (neighbours < 2 ||  neighbours > 3)) aux_board[x][y] = dead;
-            if (board[x][y].state == dead && neighbours == 3) aux_board[x][y] = alive;
-        }
+    for (int x=0; x<cols; x++)
+    for (int y=0; y<rows; y++){
+        neighbours = check_neighbours(board, rows, cols, x, y);
+        
+        if (board[x][y].state == alive && (neighbours < 2 ||  neighbours > 3)) aux_board[x][y] = dead;
+        if (board[x][y].state == dead && neighbours == 3) aux_board[x][y] = alive;
     }
     
     for (int x=0; x<cols; x++)
@@ -81,6 +85,7 @@ int game_step(cell** board, int** aux_board, int rows, int cols, int width, int 
     return 1;
 }
 
+//Desenha o tabuleiro na tela
 int show_board(cell** board, int rows, int cols, int width, int cell_size){
     if (board == NULL) return 0;
 
@@ -90,7 +95,7 @@ int show_board(cell** board, int rows, int cols, int width, int cell_size){
         for (int y=0; y<rows; y++){
             if (board[x][y].state == alive) temp_color = WHITE;
             else if (board[x][y].state == dead) temp_color = BLACK;
-            DrawRectanglePro(board[x][y].rect, (Vector2){board[x][y].rect.width/2, board[x][y].rect.height/2}, 0.0, temp_color);
+            DrawRectangleRec(board[x][y].rect, temp_color);
             DrawLine(0, y*cell_size, width, y*cell_size, GRAY);
         }
         DrawLine(x*cell_size, 0, x*cell_size, rows*cell_size, GRAY);
@@ -99,6 +104,7 @@ int show_board(cell** board, int rows, int cols, int width, int cell_size){
     return 1;
 }
 
+//Checa por click em celula do tabuleiro e muda seu estado
 int click_state(cell** board, int rows, int cols, bool game_state){
     if (board == NULL) return 0;
 
@@ -110,6 +116,7 @@ int click_state(cell** board, int rows, int cols, bool game_state){
     return 1;
 }
 
+//Reseta o estado de todas as celulas para morta
 int reset_board(cell** board, int rows, int cols){
     if (board == NULL) return 0;
 
@@ -120,6 +127,7 @@ int reset_board(cell** board, int rows, int cols){
     return 1;
 }
 
+//Reseta o estado de todas as celulas do auxiliar para morta
 int reset_aux_board(int** board, int rows, int cols){
     if (board == NULL) return 0;
 
@@ -130,19 +138,21 @@ int reset_aux_board(int** board, int rows, int cols){
     return 1;
 }
 
+//Limpa a memoria do tabuleiro
 int clear_board_memory(cell** board, int cols){
     if (board == NULL) return 0;
     
-    for (int i=0; i<cols; i++) free(board[i]);
+    for (int x=0; x<cols; x++) free(board[x]);
     free(board);
 
     return 1;
 }
 
+//Limpa a memoria do auxiliar
 int clear_aux_board_memory(int** board, int cols){
     if (board == NULL) return 0;
     
-    for (int i=0; i<cols; i++) free(board[i]);
+    for (int x=0; x<cols; x++) free(board[x]);
     free(board);
 
     return 1;
