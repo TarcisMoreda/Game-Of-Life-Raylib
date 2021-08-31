@@ -1,15 +1,15 @@
 #include <raylib.h>
 #include <stdio.h>
 
-typedef struct cell cell;
+typedef struct celula celula;
 
-cell** create_board(int rows, int cols, int width, int height, int cell_size);
-int** create_aux_board(int rows, int cols, int width, int height, int cell_size);
-int check_neighbours(cell** board, int rows, int cols, int x, int y);
-int game_step(cell** board, int** aux_board, int rows, int cols, int width, int height, int cell_size);
-int show_board(cell** board, int rows, int cols, int width, int cell_size);
-int reset_board(cell** board, int rows, int cols);
-int reset_aux_board(int** board, int rows, int cols);
-int click_state(cell** board, int rows, int cols, bool game_state);
-int clear_board_memory(cell** board, int rows);
-int clear_aux_board_memory(int** board, int rows);
+celula** criar_tabuleiro(int linhas, int colunas, int largura, int altura, int tamanho_celula);
+int** criar_tabuleiro_auxiliar(int linhas, int colunas, int largura, int altura, int tamanho_celula);
+int checar_vizinhos(celula** tabuleiro, int linhas, int colunas, int x, int y);
+int passo_jogo(celula** tabuleiro, int** aux_tabuleiro, int linhas, int colunas, int largura, int altura, int tamanho_celula);
+int mostrar_tabuleiro(celula** tabuleiro, int linhas, int colunas, int largura, int tamanho_celula);
+int resetar_tabuleiro(celula** tabuleiro, int linhas, int colunas);
+int resetar_tabuleiro_auxiliar(int** tabuleiro, int linhas, int colunas);
+int checar_clique(celula** tabuleiro, int linhas, int colunas, bool game_estado);
+int limpar_memoria_tabuleiro(celula** tabuleiro, int colunas);
+int limpar_memoria_tabuleiro_auxiliar(int** tabuleiro, int colunas);
