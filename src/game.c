@@ -92,10 +92,10 @@ int mostrar_tabuleiro(celula** tabuleiro, int linhas, int colunas, int largura, 
 
     for (int x=0; x<colunas; x++){
         for (int y=0; y<linhas; y++){
-            if (tabuleiro[x][y].estado == vivo) cor_temp = WHITE;
-            else if (tabuleiro[x][y].estado == morto) cor_temp = BLACK;
+            if (tabuleiro[x][y].estado == vivo) cor_temp = BLACK;
+            else if (tabuleiro[x][y].estado == morto) cor_temp = WHITE;
             DrawRectangleRec(tabuleiro[x][y].rect, cor_temp);
-            DrawLine(0, y*tamanho_celula, largura, y*tamanho_celula, GRAY);
+            DrawLine(0, y*tamanho_celula, largura, y*tamanho_celula, BLACK);
         }
         DrawLine(x*tamanho_celula, 0, x*tamanho_celula, linhas*tamanho_celula, GRAY);
     }
