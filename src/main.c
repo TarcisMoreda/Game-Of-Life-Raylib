@@ -12,8 +12,8 @@ int main(int argc, char const *argv[]){
     const int frames_por_geracao = (int) fps/geracoes_por_segundo;
 
     //Alocando toda a memoria nescessaria para o jogo funcionar
-    celula** tabuleiro = criar_tabuleiro(linhas, colunas, largura_janela, altura_janela, tamanho_celula);
-    int** tabuleiro_auxiliar = criar_tabuleiro_auxiliar(linhas, colunas, largura_janela, altura_janela, tamanho_celula);
+    celula** tabuleiro = criar_tabuleiro(linhas, colunas, tamanho_celula);
+    int** tabuleiro_auxiliar = criar_tabuleiro_auxiliar(linhas, colunas, tamanho_celula);
 
     //Variaveis para a logica do jogo
     bool estado_jogo = false;
@@ -51,7 +51,7 @@ int main(int argc, char const *argv[]){
 
         //Condicao para a proxima geracao
         if (frame_atual%frames_por_geracao == 0 && estado_jogo){
-            passo_jogo(tabuleiro, tabuleiro_auxiliar, linhas, colunas, largura_janela, altura_janela, tamanho_celula);
+            passo_jogo(tabuleiro, tabuleiro_auxiliar, linhas, colunas, tamanho_celula);
             ++geracao;
         }
 
@@ -61,7 +61,7 @@ int main(int argc, char const *argv[]){
         BeginDrawing();
         ClearBackground(GRAY);
 
-        mostrar_tabuleiro(tabuleiro, linhas, colunas, largura_janela, tamanho_celula);
+        mostrar_tabuleiro(tabuleiro, linhas, colunas, tamanho_celula);
 
         //Logica para a mudanca de cor e texto do botao botao_iniciar
         if (!estado_jogo) {

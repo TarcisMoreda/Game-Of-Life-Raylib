@@ -9,7 +9,7 @@ struct celula{
 };
 
 //Funcao aloca memoria para o tabuleiro e preenche os dados de acordo
-celula** criar_tabuleiro(int linhas, int colunas, int largura, int altura, int tamanho_celula){
+celula** criar_tabuleiro(int linhas, int colunas, int tamanho_celula){
     celula** tabuleiro = NULL;
     tabuleiro = (celula**) malloc(sizeof(celula*)*colunas);
     for (int x=0; x<colunas; x++) tabuleiro[x] = (celula*) malloc(sizeof(celula)*linhas);
@@ -27,7 +27,7 @@ celula** criar_tabuleiro(int linhas, int colunas, int largura, int altura, int t
 }
 
 //Funcao aloca memoria para o tabuleiro auxiliar e preenche os dados
-int** criar_tabuleiro_auxiliar(int linhas, int colunas, int largura, int altura, int tamanho_celula){
+int** criar_tabuleiro_auxiliar(int linhas, int colunas, int tamanho_celula){
     int** tabuleiro = NULL;
     tabuleiro = (int**) malloc(sizeof(int*)*colunas);
     for (int x=0; x<colunas; x++) tabuleiro[x] = (int*) malloc(sizeof(int)*linhas);
@@ -41,38 +41,32 @@ int** criar_tabuleiro_auxiliar(int linhas, int colunas, int largura, int altura,
 
 //Procura por todos os vizinhos da celula atual
 int checar_vizinhos(celula** tabuleiro, int linhas, int colunas, int x, int y){
-    int neighbours = 0;
+    int vizinhos = 0;
     
-    for (int i=-1; i<=1; i++){
-        for (int j=-1; j<=1; j++){
-            if (i == 0 && j == 0) continue;
-            if (x+i == -1 || y+j == -1) continue;
-            if (x+i == colunas || y+j == linhas) continue;
-            if (tabuleiro[x+i][y+j].estado == vivo) neighbours++;
-        }
+    for (int i=-1; i<=1; i++)
+    for (int j=-1; j<=1; j++){
+        if (i == 0 && j == 0) continue;
+        if (x+i == -1 || y+j == -1) continue;
+        if (x+i == colunas || y+j == linhas) continue;
+        if (tabuleiro[x+i][y+j].estado == vivo) ++vizinhos;
     }
 
-    return neighbours;
+    return vizinhos;
 }
 
 //Faz a proxima geracao do jogo
-int passo_jogo(celula** tabuleiro, int** aux_tabuleiro, int linhas, int colunas, int largura, int altura, int tamanho_celula){
+int passo_jogo(celula** tabuleiro, int** aux_tabuleiro, int linhas, int colunas, int tamanho_celula){
     if (tabuleiro == NULL) return 0;
 
-    int neighbours;
-    int temp;
-    
-    for (int x=0; x<colunas; x++)
-    for (int y=0; y<linhas; y++)
-    aux_tabuleiro[x][y] = tabuleiro[x][y].estado;
-    
-    
+    int vizinhos;
+
     for (int x=0; x<colunas; x++)
     for (int y=0; y<linhas; y++){
-        neighbours = checar_vizinhos(tabuleiro, linhas, colunas, x, y);
+        aux_tabuleiro[x][y] = tabuleiro[x][y].estado;
+        vizinhos = checar_vizinhos(tabuleiro, linhas, colunas, x, y);
         
-        if (tabuleiro[x][y].estado == vivo && (neighbours < 2 ||  neighbours > 3)) aux_tabuleiro[x][y] = morto;
-        if (tabuleiro[x][y].estado == morto && neighbours == 3) aux_tabuleiro[x][y] = vivo;
+        if (tabuleiro[x][y].estado == vivo && (vizinhos < 2 ||  vizinhos > 3)) aux_tabuleiro[x][y] = morto;
+        if (tabuleiro[x][y].estado == morto && vizinhos == 3) aux_tabuleiro[x][y] = vivo;
     }
     
     for (int x=0; x<colunas; x++)
@@ -85,19 +79,18 @@ int passo_jogo(celula** tabuleiro, int** aux_tabuleiro, int linhas, int colunas,
 }
 
 //Desenha o tabuleiro na tela
-int mostrar_tabuleiro(celula** tabuleiro, int linhas, int colunas, int largura, int tamanho_celula){
+int mostrar_tabuleiro(celula** tabuleiro, int linhas, int colunas, int tamanho_celula){
     if (tabuleiro == NULL) return 0;
-
-    Color cor_temp;
 
     for (int x=0; x<colunas; x++){
         for (int y=0; y<linhas; y++){
-            if (tabuleiro[x][y].estado == vivo) cor_temp = BLACK;
-            else if (tabuleiro[x][y].estado == morto) cor_temp = WHITE;
-            DrawRectangleRec(tabuleiro[x][y].rect, cor_temp);
-            DrawLine(0, y*tamanho_celula, largura, y*tamanho_celula, BLACK);
+            if (tabuleiro[x][y].estado == vivo) 
+            DrawRectangleRec(tabuleiro[x][y].rect, BLACK);
+            else DrawRectangleRec(tabuleiro[x][y].rect, WHITE);
+
+            DrawLine(0, y*tamanho_celula, colunas*tamanho_celula, y*tamanho_celula, BLACK);
         }
-        DrawLine(x*tamanho_celula, 0, x*tamanho_celula, linhas*tamanho_celula, GRAY);
+        DrawLine(x*tamanho_celula, 0, x*tamanho_celula, linhas*tamanho_celula, BLACK);
     }
 
     return 1;
