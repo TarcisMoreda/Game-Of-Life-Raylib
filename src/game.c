@@ -1,12 +1,8 @@
 #include "../include/game.h"
 #include <stdlib.h>
 
-//definindo o que e uma celula
+//definindo os estados de uma celula
 enum{vivo = 1, morto = 0};
-struct celula{
-    Rectangle rect;
-    int estado;
-};
 
 //Funcao aloca memoria para o tabuleiro e preenche os dados de acordo
 celula** criar_tabuleiro(int linhas, int colunas, int tamanho_celula){

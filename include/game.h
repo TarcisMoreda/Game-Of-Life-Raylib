@@ -1,7 +1,10 @@
 #include <raylib.h>
 #include <stdio.h>
 
-typedef struct celula celula;
+typedef struct{
+    Rectangle rect;
+    int estado;
+} celula;
 
 celula** criar_tabuleiro(int linhas, int colunas, int tamanho_celula);
 int** criar_tabuleiro_auxiliar(int linhas, int colunas, int tamanho_celula);
