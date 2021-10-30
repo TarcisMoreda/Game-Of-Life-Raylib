@@ -1,16 +1,6 @@
 #include "../include/game.h"
 
 int main(int argc, char const *argv[]){
-    //Definindo constantes que podem ser alteradas para uma experiencia diferente
-    const int largura_janela = 800;
-    const int altura_janela = 600;
-    const int tamanho_celula = 8;
-    const int colunas = (int) largura_janela/tamanho_celula;
-    const int linhas = (int) ((altura_janela-50)/tamanho_celula);
-    const int fps = 60;
-    const int geracoes_por_segundo = 5;
-    const int frames_por_geracao = (int) fps/geracoes_por_segundo;
-
     //Alocando toda a memoria nescessaria para o jogo funcionar
     celula** tabuleiro = criar_tabuleiro(linhas, colunas, tamanho_celula);
     int** tabuleiro_auxiliar = criar_tabuleiro_auxiliar(linhas, colunas, tamanho_celula);
@@ -40,18 +30,18 @@ int main(int argc, char const *argv[]){
     //Loop principal do jogo
     while (!WindowShouldClose()){
         //Logica do clique no taabuleiro
-        checar_clique(tabuleiro, linhas, colunas, estado_jogo);
+        checar_clique(tabuleiro, estado_jogo);
 
         //Logica dos botoes
         if (CheckCollisionPointRec(GetMousePosition(), botao_iniciar) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) estado_jogo = !estado_jogo;
         if (CheckCollisionPointRec(GetMousePosition(), botao_limpar) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && !estado_jogo){
-            resetar_tabuleiro(tabuleiro, linhas, colunas);
+            resetar_tabuleiro(tabuleiro);
             geracao = 0;
         }
 
         //Condicao para a proxima geracao
         if (frame_atual%frames_por_geracao == 0 && estado_jogo){
-            passo_jogo(tabuleiro, tabuleiro_auxiliar, linhas, colunas, tamanho_celula);
+            passo_jogo(tabuleiro, tabuleiro_auxiliar);
             ++geracao;
         }
 
@@ -61,7 +51,7 @@ int main(int argc, char const *argv[]){
         BeginDrawing();
         ClearBackground(GRAY);
 
-        mostrar_tabuleiro(tabuleiro, linhas, colunas, tamanho_celula);
+        mostrar_tabuleiro(tabuleiro);
 
         //Logica para a mudanca de cor e texto do botao botao_iniciar
         if (!estado_jogo) {
@@ -83,8 +73,8 @@ int main(int argc, char const *argv[]){
     }
 
     //Limpando memoria e finalizando raylib
-    limpar_memoria_tabuleiro(tabuleiro, linhas);
-    limpar_memoria_tabuleiro_auxiliar(tabuleiro_auxiliar, colunas);
+    limpar_memoria_tabuleiro(tabuleiro);
+    limpar_memoria_tabuleiro_auxiliar(tabuleiro_auxiliar);
     CloseWindow();
 
     return 0;

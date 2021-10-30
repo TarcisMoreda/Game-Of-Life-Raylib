@@ -1,11 +1,7 @@
 #include "../include/game.h"
-#include <stdlib.h>
-
-//definindo os estados de uma celula
-enum{vivo = 1, morto = 0};
 
 //Funcao aloca memoria para o tabuleiro e preenche os dados de acordo
-celula** criar_tabuleiro(int linhas, int colunas, int tamanho_celula){
+celula** criar_tabuleiro(){
     celula** tabuleiro = NULL;
     tabuleiro = (celula**) malloc(sizeof(celula*)*colunas);
     for (int x=0; x<colunas; x++) tabuleiro[x] = (celula*) malloc(sizeof(celula)*linhas);
@@ -23,7 +19,7 @@ celula** criar_tabuleiro(int linhas, int colunas, int tamanho_celula){
 }
 
 //Funcao aloca memoria para o tabuleiro auxiliar e preenche os dados
-int** criar_tabuleiro_auxiliar(int linhas, int colunas, int tamanho_celula){
+int** criar_tabuleiro_auxiliar(){
     int** tabuleiro = NULL;
     tabuleiro = (int**) malloc(sizeof(int*)*colunas);
     for (int x=0; x<colunas; x++) tabuleiro[x] = (int*) malloc(sizeof(int)*linhas);
@@ -36,7 +32,7 @@ int** criar_tabuleiro_auxiliar(int linhas, int colunas, int tamanho_celula){
 }
 
 //Procura por todos os vizinhos da celula atual
-int checar_vizinhos(celula** tabuleiro, int linhas, int colunas, int x, int y){
+int checar_vizinhos(celula** tabuleiro, int x, int y){
     int vizinhos = 0;
     
     for (int i=-1; i<=1; i++)
@@ -51,7 +47,7 @@ int checar_vizinhos(celula** tabuleiro, int linhas, int colunas, int x, int y){
 }
 
 //Faz a proxima geracao do jogo
-int passo_jogo(celula** tabuleiro, int** aux_tabuleiro, int linhas, int colunas, int tamanho_celula){
+int passo_jogo(celula** tabuleiro, int** aux_tabuleiro){
     if (tabuleiro == NULL) return 0;
 
     int vizinhos;
@@ -59,7 +55,7 @@ int passo_jogo(celula** tabuleiro, int** aux_tabuleiro, int linhas, int colunas,
     for (int x=0; x<colunas; x++)
     for (int y=0; y<linhas; y++){
         aux_tabuleiro[x][y] = tabuleiro[x][y].estado;
-        vizinhos = checar_vizinhos(tabuleiro, linhas, colunas, x, y);
+        vizinhos = checar_vizinhos(tabuleiro, x, y);
         
         if (tabuleiro[x][y].estado == vivo && (vizinhos < 2 ||  vizinhos > 3)) aux_tabuleiro[x][y] = morto;
         if (tabuleiro[x][y].estado == morto && vizinhos == 3) aux_tabuleiro[x][y] = vivo;
@@ -69,13 +65,13 @@ int passo_jogo(celula** tabuleiro, int** aux_tabuleiro, int linhas, int colunas,
     for (int y=0; y<linhas; y++)
     tabuleiro[x][y].estado = aux_tabuleiro[x][y];
 
-    resetar_tabuleiro_auxiliar(aux_tabuleiro, linhas, colunas);
+    resetar_tabuleiro_auxiliar(aux_tabuleiro);
 
     return 1;
 }
 
 //Desenha o tabuleiro na tela
-int mostrar_tabuleiro(celula** tabuleiro, int linhas, int colunas, int tamanho_celula){
+int mostrar_tabuleiro(celula** tabuleiro){
     if (tabuleiro == NULL) return 0;
 
     for (int x=0; x<colunas; x++){
@@ -93,7 +89,7 @@ int mostrar_tabuleiro(celula** tabuleiro, int linhas, int colunas, int tamanho_c
 }
 
 //Reseta o estado de todas as celulas para morta
-int resetar_tabuleiro(celula** tabuleiro, int linhas, int colunas){
+int resetar_tabuleiro(celula** tabuleiro){
     if (tabuleiro == NULL) return 0;
 
     for (int x=0; x<colunas; x++)
@@ -104,7 +100,7 @@ int resetar_tabuleiro(celula** tabuleiro, int linhas, int colunas){
 }
 
 //Reseta o estado de todas as celulas do auxiliar para morta
-int resetar_tabuleiro_auxiliar(int** tabuleiro, int linhas, int colunas){
+int resetar_tabuleiro_auxiliar(int** tabuleiro){
     if (tabuleiro == NULL) return 0;
 
     for (int x=0; x<colunas; x++)
@@ -115,19 +111,22 @@ int resetar_tabuleiro_auxiliar(int** tabuleiro, int linhas, int colunas){
 }
 
 //Checa por click em celula do tabuleiro e muda seu estado
-int checar_clique(celula** tabuleiro, int linhas, int colunas, bool game_estado){
+int checar_clique(celula** tabuleiro, bool game_estado){
     if (tabuleiro == NULL) return 0;
 
     for (int x=0; x<colunas; x++) 
-    for (int y=0; y<linhas; y++)
-    if (CheckCollisionPointRec(GetMousePosition(), tabuleiro[x][y].rect) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && !game_estado)
-    tabuleiro[x][y].estado = !tabuleiro[x][y].estado;
+    for (int y=0; y<linhas; y++){
+    if (CheckCollisionPointRec(GetMousePosition(), tabuleiro[x][y].rect) && IsMouseButtonDown(MOUSE_LEFT_BUTTON) && !game_estado)
+    tabuleiro[x][y].estado = vivo;
+    else if (CheckCollisionPointRec(GetMousePosition(), tabuleiro[x][y].rect) && IsMouseButtonDown(MOUSE_RIGHT_BUTTON) && !game_estado)
+    tabuleiro[x][y].estado = morto;
+    }
 
     return 1;
 }
 
 //Limpa a memoria do tabuleiro
-int limpar_memoria_tabuleiro(celula** tabuleiro, int colunas){
+int limpar_memoria_tabuleiro(celula** tabuleiro){
     if (tabuleiro == NULL) return 0;
     
     for (int x=0; x<colunas; x++) free(tabuleiro[x]);
@@ -137,7 +136,7 @@ int limpar_memoria_tabuleiro(celula** tabuleiro, int colunas){
 }
 
 //Limpa a memoria do auxiliar
-int limpar_memoria_tabuleiro_auxiliar(int** tabuleiro, int colunas){
+int limpar_memoria_tabuleiro_auxiliar(int** tabuleiro){
     if (tabuleiro == NULL) return 0;
     
     for (int x=0; x<colunas; x++) free(tabuleiro[x]);
