@@ -1,11 +1,26 @@
-GoL: main.o game.o
-	gcc main.o game.o -o GoL.bin -lraylib -lglfw -lGL -lopenal -lm -pthread -ldl -lX11 -lXrandr -lXinerama -lXi -lXxf86vm -lXcursor
+GCC=gcc
+CFLAGS=-g -Wall
+LIBS=-lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
-main.o: ../src/main.c ../include/game.h
-	gcc -c ../src/main.c
+SRC=../src
+INC=../include
+OBJ=obj
+SRCS=$(wildcard $(SRC)/*.c)
+OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
+HDRS=$(wildcard $(INC)/*.h)
+BIN=GoL
 
-game.o: ../src/game.c ../include/game.h
-	gcc -c ../src/game.c
+all: $(BIN)
+
+$(BIN): $(OBJS) $(OBJ)
+	$(GCC) $(CFLAGS) $(OBJS) -o $(BIN) $(LIBS)
+
+$(OBJ)/%.o: $(SRC)/%.c $(OBJ)
+	$(GCC) $(CFLAGS) -c $< -o $@
+
+$(OBJ):
+	mkdir -p $@
 
 clean:
-	rm *.o GoL.bin
+	$(RM) -r $(OBJ)
+	$(RM) $(BIN)
